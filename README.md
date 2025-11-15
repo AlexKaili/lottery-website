@@ -1,188 +1,188 @@
-# 彩票网站项目
+# 복권 웹사이트 프로젝트
 
-## 项目概述
+## 프로젝트 개요
 
-本项目是一个基于Django和Docker构建的在线彩票网站，提供用户注册、彩票购买、开奖管理等功能。
+본 프로젝트는 Django와 Docker를 기반으로 구축된 온라인 복권 웹사이트로, 사용자 회원가입, 복권 구매, 추첨 관리 등의 기능을 제공합니다.
 
-## 功能特性
+## 기능 특징
 
-### 用户功能
-- 用户注册和登录
-- 账户充值
-- 彩票购买（手动选号和机选）
-- 查看购买历史
-- 中奖查询和兑奖
-- 个人资料管理
+### 사용자 기능
+- 사용자 회원가입 및 로그인
+- 계정 충전
+- 복권 구매 (수동 번호 선택 및 자동 선택)
+- 구매 이력 조회
+- 당첨 조회 및 상금 교환
+- 개인 프로필 관리
 
-### 管理员功能
-- 彩票类型管理
-- 开奖期次管理
-- 执行开奖操作
-- 销售统计报告
-- 用户管理
-- 中奖确认
+### 관리자 기능
+- 복권 유형 관리
+- 추첨 회차 관리
+- 추첨 작업 실행
+- 판매 통계 보고서
+- 사용자 관리
+- 당첨 확인
 
-### 系统特性
-- 响应式Web界面
-- 安全的用户认证
-- 自动中奖检测
-- 交易记录追踪
-- Docker容器化部署
+### 시스템 특징
+- 반응형 웹 인터페이스
+- 안전한 사용자 인증
+- 자동 당첨 검출
+- 거래 기록 추적
+- Docker 컨테이너화 배포
 
-## 技术栈
+## 기술 스택
 
-- **后端框架**: Django 3.2.25
-- **数据库**: PostgreSQL (生产环境) / SQLite (开发环境)
-- **前端**: Bootstrap 5 + HTML/CSS/JavaScript
-- **容器化**: Docker + Docker Compose
-- **Python版本**: 3.7+
+- **백엔드 프레임워크**: Django 3.2.25
+- **데이터베이스**: PostgreSQL (운영 환경) / SQLite (개발 환경)
+- **프론트엔드**: Bootstrap 5 + HTML/CSS/JavaScript
+- **컨테이너화**: Docker + Docker Compose
+- **Python 버전**: 3.7+
 
-## 项目结构
+## 프로젝트 구조
 
 ```
 lottery_project/
-├── accounts/              # 用户账户应用
-├── lottery/               # 彩票核心功能
-├── management/            # 管理员功能
-├── templates/             # HTML模板
-├── static/                # 静态文件
-├── lottery_project/       # 项目配置
-├── requirements.txt       # Python依赖
-├── Dockerfile            # Docker镜像配置
-├── docker-compose.yml    # Docker编排配置
-└── manage.py             # Django管理脚本
+├── accounts/              # 사용자 계정 애플리케이션
+├── lottery/               # 복권 핵심 기능
+├── management/            # 관리자 기능
+├── templates/             # HTML 템플릿
+├── static/                # 정적 파일
+├── lottery_project/       # 프로젝트 설정
+├── requirements.txt       # Python 의존성
+├── Dockerfile            # Docker 이미지 설정
+├── docker-compose.yml    # Docker 오케스트레이션 설정
+└── manage.py             # Django 관리 스크립트
 ```
 
-## 安装和运行
+## 설치 및 실행
 
-### 方法1: Docker部署（推荐）
+### 방법1: Docker 배포 (권장)
 
-1. 确保已安装Docker和Docker Compose
+1. Docker와 Docker Compose가 설치되어 있는지 확인
 
-2. 克隆项目
+2. 프로젝트 클론
 ```bash
 git clone <repository-url>
 cd lottery_project
 ```
 
-3. 启动服务
+3. 서비스 시작
 ```bash
 docker-compose up -d
 ```
 
-4. 访问网站
+4. 웹사이트 접속
 ```
 http://localhost:8000
 ```
 
-### 方法2: 本地开发
+### 방법2: 로컬 개발
 
-1. 安装Python依赖
+1. Python 의존성 설치
 ```bash
 pip install -r requirements.txt
 ```
 
-2. 运行数据库迁移
+2. 데이터베이스 마이그레이션 실행
 ```bash
 python manage.py migrate
 ```
 
-3. 初始化测试数据
+3. 테스트 데이터 초기화
 ```bash
 python manage.py init_data
 ```
 
-4. 启动开发服务器
+4. 개발 서버 시작
 ```bash
 python manage.py runserver
 ```
 
-## 默认账户
+## 기본 계정
 
-系统初始化后会创建以下测试账户：
+시스템 초기화 후 다음 테스트 계정이 생성됩니다:
 
-- **管理员账户**: 
-  - 用户名: admin
-  - 密码: admin123
-  - 权限: 管理员权限，可访问管理后台
+- **관리자 계정**: 
+  - 사용자명: admin
+  - 비밀번호: admin123
+  - 권한: 관리자 권한, 관리 백엔드 접근 가능
 
-- **测试用户**: 
-  - 用户名: testuser
-  - 密码: test123
-  - 余额: 500元
+- **테스트 사용자**: 
+  - 사용자명: testuser
+  - 비밀번호: test123
+  - 잔액: 500원
 
-## 数据模型
+## 데이터 모델
 
-### 核心模型
+### 핵심 모델
 
-1. **LotteryType** - 彩票类型
-   - 彩票名称、描述、价格
-   - 选号规则（号码范围、选择数量）
+1. **LotteryType** - 복권 유형
+   - 복권 이름, 설명, 가격
+   - 번호 선택 규칙 (번호 범위, 선택 수량)
 
-2. **LotteryDraw** - 开奖期次
-   - 期次号、开奖时间
-   - 中奖号码、开奖状态
+2. **LotteryDraw** - 추첨 회차
+   - 회차 번호, 추첨 시간
+   - 당첨 번호, 추첨 상태
 
-3. **LotteryTicket** - 彩票
-   - 用户、期次、选择号码
-   - 中奖状态、奖金金额
+3. **LotteryTicket** - 복권
+   - 사용자, 회차, 선택 번호
+   - 당첨 상태, 상금 금액
 
-4. **UserProfile** - 用户资料
-   - 账户余额、消费统计
-   - 联系信息
+4. **UserProfile** - 사용자 프로필
+   - 계정 잔액, 소비 통계
+   - 연락처 정보
 
-5. **Transaction** - 交易记录
-   - 交易类型、金额、描述
-   - 时间戳
+5. **Transaction** - 거래 기록
+   - 거래 유형, 금액, 설명
+   - 타임스탬프
 
-## API接口
+## API 인터페이스
 
-### 用户相关
-- `/accounts/register/` - 用户注册
-- `/accounts/login/` - 用户登录
-- `/accounts/profile/` - 个人中心
-- `/accounts/recharge/` - 账户充值
+### 사용자 관련
+- `/accounts/register/` - 사용자 회원가입
+- `/accounts/login/` - 사용자 로그인
+- `/accounts/profile/` - 개인 센터
+- `/accounts/recharge/` - 계정 충전
 
-### 彩票相关
-- `/` - 首页
-- `/lottery/` - 彩票大厅
-- `/purchase/<id>/` - 购买彩票
-- `/my-tickets/` - 我的彩票
-- `/check-winnings/` - 检查中奖
-- `/draw-results/` - 开奖结果
+### 복권 관련
+- `/` - 홈페이지
+- `/lottery/` - 복권 홀
+- `/purchase/<id>/` - 복권 구매
+- `/my-tickets/` - 내 복권
+- `/check-winnings/` - 당첨 확인
+- `/draw-results/` - 추첨 결과
 
-### 管理功能
-- `/management/` - 管理后台
-- `/management/draw-management/` - 开奖管理
-- `/management/conduct-draw/<id>/` - 执行开奖
-- `/management/sales-report/` - 销售报告
+### 관리 기능
+- `/management/` - 관리 백엔드
+- `/management/draw-management/` - 추첨 관리
+- `/management/conduct-draw/<id>/` - 추첨 실행
+- `/management/sales-report/` - 판매 보고서
 
-## 测试
+## 테스트
 
-运行测试用例：
+테스트 케이스 실행:
 ```bash
 python manage.py test
 ```
 
-测试覆盖：
-- 模型功能测试
-- 视图功能测试
-- 用户认证测试
-- 彩票购买流程测试
-- 中奖检测测试
+테스트 커버리지:
+- 모델 기능 테스트
+- 뷰 기능 테스트
+- 사용자 인증 테스트
+- 복권 구매 프로세스 테스트
+- 당첨 검출 테스트
 
-## 部署说明
+## 배포 설명
 
-### 生产环境部署
+### 운영 환경 배포
 
-1. 修改 `docker-compose.yml` 中的环境变量
-2. 设置安全的数据库密码
-3. 配置域名和SSL证书
-4. 启用生产环境设置
+1. `docker-compose.yml`의 환경 변수 수정
+2. 안전한 데이터베이스 비밀번호 설정
+3. 도메인 및 SSL 인증서 구성
+4. 운영 환경 설정 활성화
 
-### 环境变量
+### 환경 변수
 
-创建 `.env` 文件：
+`.env` 파일 생성:
 ```
 DEBUG=False
 SECRET_KEY=your-production-secret-key
@@ -190,22 +190,18 @@ DATABASE_URL=postgresql://user:pass@db:5432/lottery_db
 ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
 ```
 
-## 安全考虑
+## 보안 고려사항
 
-- 使用CSRF保护
-- 密码哈希存储
-- 用户权限控制
-- SQL注入防护
-- XSS攻击防护
+- CSRF 보호 사용
+- 비밀번호 해시 저장
+- 사용자 권한 제어
+- SQL 인젝션 방어
+- XSS 공격 방어
 
-## 许可证
+## 기여
 
-本项目仅用于学习和演示目的。
+프로젝트 개선을 위한 Issue 및 Pull Request 제출을 환영합니다.
 
-## 贡献
+## 연락처
 
-欢迎提交Issue和Pull Request来改进项目。
-
-## 联系方式
-
-如有问题请联系项目维护者。
+문의사항이 있으시면 프로젝트 관리자에게 연락해 주세요.

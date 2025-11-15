@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}管理后台{% endblock %}
+{% block title %}관리자 페이지{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>管理后台</h2>
+    <h2>관리자 페이지</h2>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active">仪表板</li>
+            <li class="breadcrumb-item active">대시보드</li>
         </ol>
     </nav>
 </div>
@@ -17,7 +17,7 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-primary">总用户数</h5>
+                <h5 class="card-title text-primary">총 사용자 수</h5>
                 <h2 class="text-primary">{{ total_users }}</h2>
             </div>
         </div>
@@ -25,7 +25,7 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-info">总彩票数</h5>
+                <h5 class="card-title text-info">총 복권 수</h5>
                 <h2 class="text-info">{{ total_tickets }}</h2>
             </div>
         </div>
@@ -33,16 +33,16 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-success">总销售额</h5>
-                <h2 class="text-success">￥{{ total_sales }}</h2>
+                <h5 class="card-title text-success">총 판매액</h5>
+                <h2 class="text-success">₩{{ total_sales }}</h2>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-warning">总奖金</h5>
-                <h2 class="text-warning">￥{{ total_winnings }}</h2>
+                <h5 class="card-title text-warning">총 상금</h5>
+                <h2 class="text-warning">₩{{ total_winnings }}</h2>
             </div>
         </div>
     </div>
@@ -53,27 +53,27 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5>快速操作</h5>
+                <h5>빠른 작업</h5>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-2">
-                        <a href="{% url 'management:sales_report' %}" class="btn btn-outline-primary w-100">销售报告</a>
+                        <a href="{% url 'management:sales_report' %}" class="btn btn-outline-primary w-100">판매 보고서</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="{% url 'management:draw_management' %}" class="btn btn-outline-success w-100">开奖管理</a>
+                        <a href="{% url 'management:draw_management' %}" class="btn btn-outline-success w-100">추첨 관리</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="{% url 'management:create_draw' %}" class="btn btn-outline-info w-100">创建期次</a>
+                        <a href="{% url 'management:create_draw' %}" class="btn btn-outline-info w-100">회차 생성</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="{% url 'management:user_management' %}" class="btn btn-outline-warning w-100">用户管理</a>
+                        <a href="{% url 'management:user_management' %}" class="btn btn-outline-warning w-100">사용자 관리</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="{% url 'management:lottery_type_management' %}" class="btn btn-outline-secondary w-100">彩票管理</a>
+                        <a href="{% url 'management:lottery_type_management' %}" class="btn btn-outline-secondary w-100">복권 관리</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="{% url 'admin:index' %}" class="btn btn-outline-dark w-100">Django后台</a>
+                        <a href="{% url 'admin:index' %}" class="btn btn-outline-dark w-100">Django 관리</a>
                     </div>
                 </div>
             </div>
@@ -86,8 +86,8 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <h5>待开奖期次</h5>
-                <a href="{% url 'management:draw_management' %}" class="btn btn-outline-primary btn-sm">查看全部</a>
+                <h5>추첨 대기 회차</h5>
+                <a href="{% url 'management:draw_management' %}" class="btn btn-outline-primary btn-sm">전체 보기</a>
             </div>
             <div class="card-body">
                 {% if pending_draws %}
@@ -95,10 +95,10 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>彩票类型</th>
-                                <th>期次</th>
-                                <th>开奖时间</th>
-                                <th>操作</th>
+                                <th>복권 유형</th>
+                                <th>회차</th>
+                                <th>추첨 시간</th>
+                                <th>작업</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,7 +108,7 @@
                                 <td>{{ draw.draw_number }}</td>
                                 <td>{{ draw.draw_date|date:"m-d H:i" }}</td>
                                 <td>
-                                    <a href="{% url 'management:conduct_draw' draw.id %}" class="btn btn-success btn-sm">开奖</a>
+                                    <a href="{% url 'management:conduct_draw' draw.id %}" class="btn btn-success btn-sm">추첨</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -116,7 +116,7 @@
                     </table>
                 </div>
                 {% else %}
-                <p class="text-muted">暂无待开奖期次</p>
+                <p class="text-muted">추첨 대기 회차가 없습니다</p>
                 {% endif %}
             </div>
         </div>
@@ -126,7 +126,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5>最近彩票销售</h5>
+                <h5>최근 복권 판매</h5>
             </div>
             <div class="card-body">
                 {% if recent_tickets %}
@@ -134,10 +134,10 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>用户</th>
-                                <th>彩票类型</th>
-                                <th>购买时间</th>
-                                <th>状态</th>
+                                <th>사용자</th>
+                                <th>복권 유형</th>
+                                <th>구매 시간</th>
+                                <th>상태</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -148,11 +148,11 @@
                                 <td>{{ ticket.purchase_time|date:"m-d H:i" }}</td>
                                 <td>
                                     {% if ticket.is_winning %}
-                                    <span class="badge bg-success">中奖</span>
+                                    <span class="badge bg-success">당첨</span>
                                     {% elif ticket.lottery_draw.is_drawn %}
-                                    <span class="badge bg-secondary">未中奖</span>
+                                    <span class="badge bg-secondary">미당첨</span>
                                     {% else %}
-                                    <span class="badge bg-primary">待开奖</span>
+                                    <span class="badge bg-primary">추첨 대기</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -161,7 +161,7 @@
                     </table>
                 </div>
                 {% else %}
-                <p class="text-muted">暂无销售记录</p>
+                <p class="text-muted">판매 기록이 없습니다</p>
                 {% endif %}
             </div>
         </div>

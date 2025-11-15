@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}用户管理{% endblock %}
+{% block title %}사용자 관리{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>用户管理</h2>
-    <a href="{% url 'management:admin_dashboard' %}" class="btn btn-outline-primary">返回仪表板</a>
+    <h2>사용자 관리</h2>
+    <a href="{% url 'management:admin_dashboard' %}" class="btn btn-outline-primary">대시보드로 돌아가기</a>
 </div>
 
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5>用户列表</h5>
+                <h5>사용자 목록</h5>
             </div>
             <div class="card-body">
                 {% if user_stats %}
@@ -20,15 +20,15 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>用户名</th>
-                                <th>邮箱</th>
-                                <th>注册时间</th>
-                                <th>账户余额</th>
-                                <th>购买彩票数</th>
-                                <th>中奖彩票数</th>
-                                <th>总消费</th>
-                                <th>总中奖</th>
-                                <th>状态</th>
+                                <th>사용자명</th>
+                                <th>이메일</th>
+                                <th>가입 시간</th>
+                                <th>계정 잔액</th>
+                                <th>구매 복권 수</th>
+                                <th>당첨 복권 수</th>
+                                <th>총 소비</th>
+                                <th>총 당첨</th>
+                                <th>상태</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,21 +37,21 @@
                                 <td>
                                     <strong>{{ stat.user.username }}</strong>
                                     {% if stat.user.is_staff %}
-                                    <span class="badge bg-danger">管理员</span>
+                                    <span class="badge bg-danger">관리자</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ stat.user.email|default:"-" }}</td>
                                 <td>{{ stat.user.date_joined|date:"Y-m-d" }}</td>
-                                <td>￥{{ stat.profile.balance }}</td>
+                                <td>₩{{ stat.profile.balance }}</td>
                                 <td>{{ stat.tickets_count }}</td>
                                 <td>{{ stat.winning_tickets }}</td>
-                                <td>￥{{ stat.profile.total_spent }}</td>
-                                <td>￥{{ stat.profile.total_won }}</td>
+                                <td>₩{{ stat.profile.total_spent }}</td>
+                                <td>₩{{ stat.profile.total_won }}</td>
                                 <td>
                                     {% if stat.user.is_active %}
-                                    <span class="badge bg-success">活跃</span>
+                                    <span class="badge bg-success">활성</span>
                                     {% else %}
-                                    <span class="badge bg-secondary">禁用</span>
+                                    <span class="badge bg-secondary">비활성</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -61,7 +61,7 @@
                 </div>
                 {% else %}
                 <div class="alert alert-info">
-                    暂无用户数据
+                    사용자 데이터가 없습니다
                 </div>
                 {% endif %}
             </div>
@@ -74,36 +74,36 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-primary">总用户数</h5>
+                <h5 class="card-title text-primary">총 사용자 수</h5>
                 <h3 class="text-primary">{{ user_stats|length }}</h3>
-                <small class="text-muted">注册用户</small>
+                <small class="text-muted">가입 사용자</small>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-success">活跃用户</h5>
+                <h5 class="card-title text-success">활성 사용자</h5>
                 <h3 class="text-success">{{ active_users_count|default:0 }}</h3>
-                <small class="text-muted">本月活跃</small>
+                <small class="text-muted">이번 달 활성</small>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-info">新用户</h5>
+                <h5 class="card-title text-info">신규 사용자</h5>
                 <h3 class="text-info">{{ new_users_count|default:0 }}</h3>
-                <small class="text-muted">本周新增</small>
+                <small class="text-muted">이번 주 신규</small>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-warning">中奖用户</h5>
+                <h5 class="card-title text-warning">당첨 사용자</h5>
                 <h3 class="text-warning">{{ winning_users_count|default:0 }}</h3>
-                <small class="text-muted">有中奖记录</small>
+                <small class="text-muted">당첨 기록 보유</small>
             </div>
         </div>
     </div>

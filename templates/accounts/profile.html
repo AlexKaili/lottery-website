@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}个人中心{% endblock %}
+{% block title %}개인 센터{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                <h5>账户信息</h5>
+                <h5>계정 정보</h5>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label class="form-label">用户名</label>
+                        <label class="form-label">계정</label>
                         <input type="text" class="form-control" value="{{ user.username }}" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">邮箱</label>
+                        <label class="form-label">이메일</label>
                         <input type="email" class="form-control" value="{{ user.email }}" readonly>
                     </div>
                     {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary">更新资料</button>
+                    <button type="submit" class="btn btn-primary">프로필 업데이트</button>
                 </form>
             </div>
         </div>
@@ -34,25 +34,25 @@
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <h5 class="card-title text-success">账户余额</h5>
-                        <h3>￥{{ user_profile.balance }}</h3>
-                        <a href="{% url 'accounts:recharge' %}" class="btn btn-success btn-sm">充值</a>
+                        <h5 class="card-title text-success">계정 잔액</h5>
+                        <h3>₩{{ user_profile.balance }}</h3>
+                        <a href="{% url 'accounts:recharge' %}" class="btn btn-success btn-sm">충전</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <h5 class="card-title text-warning">总消费</h5>
-                        <h3>￥{{ user_profile.total_spent }}</h3>
+                        <h5 class="card-title text-warning">총 소비</h5>
+                        <h3>₩{{ user_profile.total_spent }}</h3>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <h5 class="card-title text-info">总中奖</h5>
-                        <h3>￥{{ user_profile.total_won }}</h3>
+                        <h5 class="card-title text-info">총 당첨</h5>
+                        <h3>₩{{ user_profile.total_won }}</h3>
                     </div>
                 </div>
             </div>
@@ -61,8 +61,8 @@
         <!-- 最近彩票 -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between">
-                <h5>最近购买的彩票</h5>
-                <a href="{% url 'lottery:my_tickets' %}" class="btn btn-outline-primary btn-sm">查看全部</a>
+                <h5>최근 구매한 복권</h5>
+                <a href="{% url 'lottery:my_tickets' %}" class="btn btn-outline-primary btn-sm">전체 보기</a>
             </div>
             <div class="card-body">
                 {% if tickets %}
@@ -70,10 +70,10 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>彩票号码</th>
-                                <th>类型</th>
-                                <th>购买时间</th>
-                                <th>状态</th>
+                                <th>복권 번호</th>
+                                <th>유형</th>
+                                <th>구매 시간</th>
+                                <th>상태</th>
                             </tr>
                         </thead>
                         <tbody>

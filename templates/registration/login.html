@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}用户登录 - 彩票网站{% endblock %}
+{% block title %}사용자 로그인 - 복권 사이트{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">用户登录</h3>
+                <h3 class="text-center">사용자 로그인</h3>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="{{ form.username.id_for_label }}" class="form-label">用户名</label>
+                        <label for="{{ form.username.id_for_label }}" class="form-label">사용자명</label>
                         {{ form.username }}
                     </div>
                     <div class="mb-3">
-                        <label for="{{ form.password.id_for_label }}" class="form-label">密码</label>
+                        <label for="{{ form.password.id_for_label }}" class="form-label">비밀번호</label>
                         {{ form.password }}
                     </div>
                     
@@ -29,12 +29,12 @@
                     {% endif %}
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">登录</button>
+                        <button type="submit" class="btn btn-primary">로그인</button>
                     </div>
                 </form>
                 
                 <div class="text-center mt-3">
-                    <p>还没有账户？ <a href="{% url 'accounts:register' %}">立即注册</a></p>
+                    <p>아직 계정이 없으신가요? <a href="{% url 'accounts:register' %}">지금 가입</a></p>
                 </div>
             </div>
         </div>

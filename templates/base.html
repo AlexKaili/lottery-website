@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ko-KR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}彩票网站{% endblock %}</title>
+    <title>{% block title %}복권 사이트{% endblock %}</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -45,7 +45,7 @@
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'lottery:home' %}">🎲 彩票网站</a>
+            <a class="navbar-brand" href="{% url 'lottery:home' %}">🎲 복권 사이트</a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -54,20 +54,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lottery:home' %}">首页</a>
+                        <a class="nav-link" href="{% url 'lottery:home' %}">홈</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lottery:lottery_list' %}">彩票大厅</a>
+                        <a class="nav-link" href="{% url 'lottery:lottery_list' %}">복권 홀</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lottery:draw_results' %}">开奖结果</a>
+                        <a class="nav-link" href="{% url 'lottery:draw_results' %}">추첨 결과</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lottery:my_tickets' %}">我的彩票</a>
+                        <a class="nav-link" href="{% url 'lottery:my_tickets' %}">내 복권</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lottery:check_winnings' %}">检查中奖</a>
+                        <a class="nav-link" href="{% url 'lottery:check_winnings' %}">당첨 확인</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -78,26 +78,26 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 {{ user.username }}
                                 {% if user.userprofile.balance %}
-                                    <span class="badge bg-success">￥{{ user.userprofile.balance }}</span>
+                                    <span class="badge bg-success">₩{{ user.userprofile.balance }}</span>
                                 {% endif %}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">个人中心</a></li>
-                                <li><a class="dropdown-item" href="{% url 'accounts:recharge' %}">账户充值</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">개인 센터</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:recharge' %}">계정 충전</a></li>
                                 {% if user.is_staff %}
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'management:admin_dashboard' %}">管理后台</a></li>
+                                <li><a class="dropdown-item" href="{% url 'management:admin_dashboard' %}">관리자 페이지</a></li>
                                 {% endif %}
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">退出登录</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">로그아웃</a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:login' %}">登录</a>
+                            <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:register' %}">注册</a>
+                            <a class="nav-link" href="{% url 'accounts:register' %}">가입</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -128,20 +128,20 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>彩票网站</h5>
-                    <p class="text-muted">安全、公平、透明的在线彩票平台</p>
+                    <h5>복권 사이트</h5>
+                    <p class="text-muted">안전하고 공정하며 투명한 온라인 복권 플랫폼</p>
                 </div>
                 <div class="col-md-6">
-                    <h5>联系我们</h5>
+                    <h5>연락처</h5>
                     <p class="text-muted">
-                        客服电话：400-123-4567<br>
-                        邮箱：service@lottery.com
+                        고객센터: 400-123-4567<br>
+                        이메일: service@lottery.com
                     </p>
                 </div>
             </div>
             <hr>
             <div class="text-center text-muted">
-                <p>&copy; 2023 彩票网站. 保留所有权利.</p>
+                <p>&copy; 2023 복권 사이트. 모든 권리 보유.</p>
             </div>
         </div>
     </footer>

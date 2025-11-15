@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load lottery_extras %}
 
-{% block title %}我的彩票{% endblock %}
+{% block title %}내 복권{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>我的彩票</h2>
-    <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">购买彩票</a>
+    <h2>내 복권</h2>
+    <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">복권 구매</a>
 </div>
 
 {% if tickets %}
@@ -18,29 +18,29 @@
                 <span>{{ ticket.lottery_draw.lottery_type.name }}</span>
                 <span class="badge {% if ticket.is_winning %}bg-success{% elif ticket.lottery_draw.is_drawn %}bg-secondary{% else %}bg-primary{% endif %}">
                     {% if ticket.is_winning %}
-                        中奖
+                        당첨
                     {% elif ticket.lottery_draw.is_drawn %}
-                        未中奖
+                        미당첨
                     {% else %}
-                        待开奖
+                        추첨 대기
                     {% endif %}
                 </span>
             </div>
             <div class="card-body">
-                <p><strong>彩票号码：</strong>{{ ticket.ticket_number }}</p>
-                <p><strong>期次：</strong>{{ ticket.lottery_draw.draw_number }}</p>
-                <p><strong>购买时间：</strong>{{ ticket.purchase_time|date:"Y-m-d H:i" }}</p>
-                <p><strong>选择号码：</strong>
+                <p><strong>복권 번호:</strong>{{ ticket.ticket_number }}</p>
+                <p><strong>회차:</strong>{{ ticket.lottery_draw.draw_number }}</p>
+                <p><strong>구매 시간:</strong>{{ ticket.purchase_time|date:"Y-m-d H:i" }}</p>
+                <p><strong>선택 번호:</strong>
                     {% for number in ticket.selected_numbers|split:"," %}
                     <span class="lottery-number">{{ number }}</span>
                     {% endfor %}
                     {% if ticket.is_auto_select %}
-                    <span class="badge bg-info">机选</span>
+                    <span class="badge bg-info">자동 선택</span>
                     {% endif %}
                 </p>
                 
                 {% if ticket.lottery_draw.is_drawn %}
-                <p><strong>开奖号码：</strong>
+                <p><strong>당첨 번호:</strong>
                     {% for number in ticket.lottery_draw.winning_numbers|split:"," %}
                     <span class="lottery-number winning-number">{{ number }}</span>
                     {% endfor %}
@@ -49,14 +49,14 @@
                 
                 {% if ticket.is_winning %}
                 <div class="alert alert-success">
-                    <strong>恭喜中奖！奖金：￥{{ ticket.winning_amount }}</strong>
+                    <strong>축하합니다! 상금: ₩{{ ticket.winning_amount }}</strong>
                     {% if not ticket.is_claimed %}
                     <div class="mt-2">
-                        <a href="{% url 'lottery:claim_prize' ticket.id %}" class="btn btn-success btn-sm">立即兑奖</a>
+                        <a href="{% url 'lottery:claim_prize' ticket.id %}" class="btn btn-success btn-sm">상금 받기</a>
                     </div>
                     {% else %}
                     <div class="mt-2">
-                        <span class="badge bg-success">已兑奖</span>
+                        <span class="badge bg-success">상금 수령 완료</span>
                     </div>
                     {% endif %}
                 </div>
@@ -67,13 +67,13 @@
     {% endfor %}
 </div>
 
-<!-- 分页 -->
+<!-- 페이지네이션 -->
 {% if tickets.has_other_pages %}
-<nav aria-label="彩票分页">
+<nav aria-label="복권 페이지네이션">
     <ul class="pagination justify-content-center">
         {% if tickets.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ tickets.previous_page_number }}">上一页</a>
+            <a class="page-link" href="?page={{ tickets.previous_page_number }}">이전</a>
         </li>
         {% endif %}
         
@@ -91,7 +91,7 @@
         
         {% if tickets.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ tickets.next_page_number }}">下一页</a>
+            <a class="page-link" href="?page={{ tickets.next_page_number }}">다음</a>
         </li>
         {% endif %}
     </ul>
@@ -101,9 +101,9 @@
 {% else %}
 <div class="text-center">
     <div class="alert alert-info">
-        您还没有购买任何彩票。
+        구매한 복권이 없습니다.
     </div>
-    <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">立即购买</a>
+    <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">지금 구매하기</a>
 </div>
 {% endif %}
 {% endblock %}

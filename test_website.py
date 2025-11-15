@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-彩票网站功能测试脚本
+복권 사이트 기능 테스트 스크립트
 """
 import requests
 import json
@@ -8,29 +8,29 @@ import json
 BASE_URL = 'http://127.0.0.1:8000'
 
 def test_page(url, expected_status=200, description=""):
-    """测试页面是否正常访问"""
+    """페이지가 정상적으로 접근되는지 테스트합니다"""
     try:
         response = requests.get(f"{BASE_URL}{url}")
         status = "[OK]" if response.status_code == expected_status else "[FAIL]"
         print(f"{status} {description or url}: {response.status_code}")
         return response.status_code == expected_status
     except Exception as e:
-        print(f"[FAIL] {description or url}: 连接失败 - {e}")
+        print(f"[FAIL] {description or url}: 연결 실패 - {e}")
         return False
 
 def main():
-    """主测试函数"""
-    print("彩票网站功能测试")
+    """메인 테스트 함수"""
+    print("복권 사이트 기능 테스트")
     print("=" * 50)
     
-    # 测试主要页面
+    # 주요 페이지 테스트
     tests = [
-        ("/", "首页"),
-        ("/lottery/", "彩票大厅"),
-        ("/lottery/1/", "彩票详情页"),
-        ("/draw-results/", "开奖结果"),
-        ("/accounts/login/", "登录页面"),
-        ("/accounts/register/", "注册页面"),
+        ("/", "홈페이지"),
+        ("/lottery/", "복권 로비"),
+        ("/lottery/1/", "복권 상세 페이지"),
+        ("/draw-results/", "당첨 결과"),
+        ("/accounts/login/", "로그인 페이지"),
+        ("/accounts/register/", "회원가입 페이지"),
     ]
     
     passed = 0
@@ -41,16 +41,16 @@ def main():
             passed += 1
     
     print("\n" + "=" * 50)
-    print(f"测试结果: {passed}/{total} 通过")
+    print(f"테스트 결과: {passed}/{total} 통과")
     
     if passed == total:
-        print("所有基础功能测试通过！")
-        print("\n测试账户信息:")
-        print("管理员: admin / admin123")
-        print("测试用户: testuser / test123")
-        print("\n访问地址: http://127.0.0.1:8000")
+        print("모든 기본 기능 테스트 통과!")
+        print("\n테스트 계정 정보:")
+        print("관리자: admin / admin123")
+        print("테스트 유저: testuser / test123")
+        print("\n접속 주소: http://127.0.0.1:8000")
     else:
-        print("部分功能可能存在问题，请检查服务器日志")
+        print("일부 기능에 문제가 있을 수 있습니다. 서버 로그를 확인하세요.")
 
 if __name__ == "__main__":
     main()

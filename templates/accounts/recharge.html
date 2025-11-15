@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}账户充值{% endblock %}
+{% block title %}계정 충전{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">账户充值</h3>
+                <h3 class="text-center">계정 충전</h3>
             </div>
             <div class="card-body">
                 <div class="alert alert-info text-center">
-                    <h5>当前余额：￥{{ user_profile.balance }}</h5>
+                    <h5>현재 잔액: ₩{{ user_profile.balance }}</h5>
                 </div>
                 
                 <form method="post">
@@ -21,43 +21,43 @@
                     
                     <!-- 快速充值选项 -->
                     <div class="mb-3">
-                        <label class="form-label">快速选择金额</label>
+                        <label class="form-label">빠른 금액 선택</label>
                         <div class="row">
                             <div class="col-4">
-                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="50">￥50</button>
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="50">₩50</button>
                             </div>
                             <div class="col-4">
-                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="100">￥100</button>
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="100">₩100</button>
                             </div>
                             <div class="col-4">
-                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="200">￥200</button>
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="200">₩200</button>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-4">
-                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="500">￥500</button>
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="500">₩500</button>
                             </div>
                             <div class="col-4">
-                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="1000">￥1000</button>
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="1000">₩1000</button>
                             </div>
                             <div class="col-4">
-                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="2000">￥2000</button>
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="2000">₩2000</button>
                             </div>
                         </div>
                     </div>
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success btn-lg">确认充值</button>
+                        <button type="submit" class="btn btn-success btn-lg">충전 확인</button>
                     </div>
                 </form>
                 
                 <div class="mt-3">
                     <small class="text-muted">
-                        <strong>充值说明：</strong><br>
-                        • 充值金额将立即到账<br>
-                        • 最低充值金额：￥1<br>
-                        • 充值资金仅用于购买彩票<br>
-                        • 如有问题请联系客服
+                        <strong>충전 안내:</strong><br>
+                        • 충전 금액은 즉시 입금됩니다<br>
+                        • 최소 충전 금액: ₩1<br>
+                        • 충전 자금은 복권 구매에만 사용됩니다<br>
+                        • 문제가 있으시면 고객센터에 연락하세요
                     </small>
                 </div>
             </div>

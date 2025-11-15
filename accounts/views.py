@@ -8,13 +8,13 @@ from lottery.models import UserProfile, Transaction, LotteryTicket
 
 
 def register(request):
-    """用户注册"""
+    """사용자 등록"""
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, '注册成功！欢迎加入彩票网站！')
+            messages.success(request, '등록 성공! 복권 사이트에 오신 것을 환영합니다!')
             return redirect('lottery:home')
     else:
         form = CustomUserCreationForm()
@@ -23,7 +23,7 @@ def register(request):
 
 @login_required
 def profile(request):
-    """用户资料页面"""
+    """사용자 프로필 페이지"""
     try:
         user_profile = request.user.userprofile
     except UserProfile.DoesNotExist:
@@ -33,15 +33,15 @@ def profile(request):
         form = UserProfileForm(request.POST, instance=user_profile)
         if form.is_valid():
             form.save()
-            messages.success(request, '资料更新成功！')
+            messages.success(request, '프로필 업데이트 성공!')
             return redirect('accounts:profile')
     else:
         form = UserProfileForm(instance=user_profile)
     
-    # 获取用户的彩票购买记录
+    # 사용자의 복권 구매 기록 가져오기
     tickets = LotteryTicket.objects.filter(user=request.user).order_by('-purchase_time')[:10]
     
-    # 获取交易记录
+    # 거래 기록 가져오기
     transactions = Transaction.objects.filter(user=request.user)[:10]
     
     context = {
@@ -55,7 +55,7 @@ def profile(request):
 
 @login_required
 def recharge(request):
-    """账户充值"""
+    """계정 충전"""
     try:
         user_profile = request.user.userprofile
     except UserProfile.DoesNotExist:
@@ -67,19 +67,19 @@ def recharge(request):
             amount = form.cleaned_data['amount']
             
             with transaction.atomic():
-                # 更新用户余额
+                # 사용자 잔액 업데이트
                 user_profile.balance += amount
                 user_profile.save()
                 
-                # 创建交易记录
+                # 거래 기록 생성
                 Transaction.objects.create(
                     user=request.user,
                     transaction_type='recharge',
                     amount=amount,
-                    description=f'账户充值 {amount} 元'
+                    description=f'계정 충전 {amount} 원'
                 )
             
-            messages.success(request, f'充值成功！已充值 {amount} 元')
+            messages.success(request, f'충전 성공! {amount} 원이 충전되었습니다')
             return redirect('accounts:profile')
     else:
         form = RechargeForm()

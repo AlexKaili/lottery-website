@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}开奖管理{% endblock %}
+{% block title %}추첨 관리{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>开奖管理</h2>
-    <a href="{% url 'management:create_draw' %}" class="btn btn-success">创建新期次</a>
+    <h2>추첨 관리</h2>
+    <a href="{% url 'management:create_draw' %}" class="btn btn-success">새 회차 생성</a>
 </div>
 
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5>开奖期次列表</h5>
+                <h5>추첨 회차 목록</h5>
             </div>
             <div class="card-body">
                 {% if draws %}
@@ -20,13 +20,13 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>彩票类型</th>
-                                <th>期次号</th>
-                                <th>开奖时间</th>
-                                <th>状态</th>
-                                <th>中奖号码</th>
-                                <th>参与彩票数</th>
-                                <th>操作</th>
+                                <th>복권 유형</th>
+                                <th>회차 번호</th>
+                                <th>추첨 시간</th>
+                                <th>상태</th>
+                                <th>당첨 번호</th>
+                                <th>참여 복권 수</th>
+                                <th>작업</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,9 +37,9 @@
                                 <td>{{ draw.draw_date|date:"Y-m-d H:i" }}</td>
                                 <td>
                                     {% if draw.is_drawn %}
-                                    <span class="badge bg-success">已开奖</span>
+                                    <span class="badge bg-success">추첨 완료</span>
                                     {% else %}
-                                    <span class="badge bg-warning">待开奖</span>
+                                    <span class="badge bg-warning">추첨 대기</span>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -54,9 +54,9 @@
                                 </td>
                                 <td>
                                     {% if not draw.is_drawn %}
-                                    <a href="{% url 'management:conduct_draw' draw.id %}" class="btn btn-primary btn-sm">执行开奖</a>
+                                    <a href="{% url 'management:conduct_draw' draw.id %}" class="btn btn-primary btn-sm">추첨 실행</a>
                                     {% else %}
-                                    <span class="text-muted">已完成</span>
+                                    <span class="text-muted">완료</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -66,7 +66,7 @@
                 </div>
                 {% else %}
                 <div class="alert alert-info">
-                    暂无开奖期次记录。
+                    추첨 회차 기록이 없습니다.
                 </div>
                 {% endif %}
             </div>

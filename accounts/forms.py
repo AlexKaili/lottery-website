@@ -5,27 +5,27 @@ from lottery.models import UserProfile
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True, label="邮箱")
-    phone = forms.CharField(max_length=20, required=False, label="手机号")
+    email = forms.EmailField(required=True, label="이메일")
+    phone = forms.CharField(max_length=20, required=False, label="휴대폰 번호")
     
     class Meta:
         model = User
         fields = ("username", "email", "phone", "password1", "password2")
         labels = {
-            'username': '用户名',
+            'username': '사용자명',
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['password1'].label = "密码"
-        self.fields['password2'].label = "确认密码"
+        self.fields['password1'].label = "비밀번호"
+        self.fields['password2'].label = "비밀번호 확인"
     
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()
-            # 创建用户资料
+            # 사용자 프로필 생성
             UserProfile.objects.create(
                 user=user,
                 phone=self.cleaned_data.get("phone", "")
@@ -38,7 +38,7 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['phone']
         labels = {
-            'phone': '手机号',
+            'phone': '휴대폰 번호',
         }
         widgets = {
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
@@ -50,6 +50,6 @@ class RechargeForm(forms.Form):
         max_digits=10, 
         decimal_places=2, 
         min_value=1,
-        label="充值金额",
+        label="충전 금액",
         widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'})
     )

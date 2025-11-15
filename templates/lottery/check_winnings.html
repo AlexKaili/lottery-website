@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load lottery_extras %}
 
-{% block title %}检查中奖{% endblock %}
+{% block title %}당첨 확인{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>检查中奖</h2>
-    <a href="{% url 'lottery:my_tickets' %}" class="btn btn-outline-primary">查看所有彩票</a>
+    <h2>당첨 확인</h2>
+    <a href="{% url 'lottery:my_tickets' %}" class="btn btn-outline-primary">모든 복권 보기</a>
 </div>
 
 {% if winning_tickets %}
 <div class="alert alert-success">
-    <h4 class="alert-heading">🎉 恭喜中奖！</h4>
-    <p>您有 {{ winning_tickets|length }} 张彩票中奖，总奖金 <strong>￥{{ total_winnings }}</strong></p>
+    <h4 class="alert-heading">🎉 당첨을 축하합니다!</h4>
+    <p>{{ winning_tickets|length }}장의 복권이 당첨되었습니다. 총 상금 <strong>₩{{ total_winnings }}</strong></p>
 </div>
 
 <div class="row">
@@ -20,17 +20,17 @@
     <div class="col-md-6 mb-3">
         <div class="card border-success">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0">🏆 中奖彩票</h5>
+                <h5 class="mb-0">🏆 당첨 복권</h5>
             </div>
             <div class="card-body">
-                <p><strong>彩票类型：</strong>{{ ticket.lottery_draw.lottery_type.name }}</p>
-                <p><strong>彩票号码：</strong>{{ ticket.ticket_number }}</p>
-                <p><strong>期次：</strong>{{ ticket.lottery_draw.draw_number }}</p>
-                <p><strong>购买时间：</strong>{{ ticket.purchase_time|date:"Y-m-d H:i" }}</p>
+                <p><strong>복권 유형:</strong>{{ ticket.lottery_draw.lottery_type.name }}</p>
+                <p><strong>복권 번호:</strong>{{ ticket.ticket_number }}</p>
+                <p><strong>회차:</strong>{{ ticket.lottery_draw.draw_number }}</p>
+                <p><strong>구매 시간:</strong>{{ ticket.purchase_time|date:"Y-m-d H:i" }}</p>
                 
                 <div class="row">
                     <div class="col-6">
-                        <small class="text-muted">您的号码</small>
+                        <small class="text-muted">선택한 번호</small>
                         <div>
                             {% for number in ticket.selected_numbers|split:"," %}
                             <span class="lottery-number">{{ number }}</span>
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <small class="text-muted">开奖号码</small>
+                        <small class="text-muted">당첨 번호</small>
                         <div>
                             {% for number in ticket.lottery_draw.winning_numbers|split:"," %}
                             <span class="lottery-number winning-number">{{ number }}</span>
@@ -48,17 +48,17 @@
                 </div>
                 
                 <div class="alert alert-success mt-3">
-                    <strong>中奖金额：￥{{ ticket.winning_amount }}</strong>
+                    <strong>당첨 금액: ₩{{ ticket.winning_amount }}</strong>
                 </div>
                 
                 {% if not ticket.is_claimed %}
                 <div class="d-grid">
-                    <a href="{% url 'lottery:claim_prize' ticket.id %}" class="btn btn-success">立即兑奖</a>
+                    <a href="{% url 'lottery:claim_prize' ticket.id %}" class="btn btn-success">즉시 수령</a>
                 </div>
                 {% else %}
                 <div class="alert alert-info">
-                    <span class="badge bg-success">已兑奖</span>
-                    奖金已添加到您的账户余额
+                    <span class="badge bg-success">수령 완료</span>
+                    상금이 계정 잔액에 추가되었습니다
                 </div>
                 {% endif %}
             </div>
@@ -70,9 +70,9 @@
 {% else %}
 <div class="text-center">
     <div class="alert alert-info">
-        <h4>暂无中奖彩票</h4>
-        <p>继续努力，好运会来的！</p>
-        <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">继续购买彩票</a>
+        <h4>당첨된 복권이 없습니다</h4>
+        <p>계속 노력하시면 좋은 운이 올 거예요!</p>
+        <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">복권 계속 구매</a>
     </div>
 </div>
 {% endif %}
@@ -80,15 +80,15 @@
 <div class="mt-4">
     <div class="card">
         <div class="card-header">
-            <h5>中奖说明</h5>
+            <h5>당첨 안내</h5>
         </div>
         <div class="card-body">
             <ul class="mb-0">
-                <li>匹配3个号码：奖金为彩票价格的10倍</li>
-                <li>匹配4个号码：奖金为彩票价格的50倍</li>
-                <li>匹配5个号码：奖金为彩票价格的200倍</li>
-                <li>匹配6个或以上号码：奖金为彩票价格的1000倍</li>
-                <li>中奖奖金将在兑奖后立即添加到您的账户余额</li>
+                <li>3개 번호 일치: 복권 가격의 10배</li>
+                <li>4개 번호 일치: 복권 가격의 50배</li>
+                <li>5개 번호 일치: 복권 가격의 200배</li>
+                <li>6개 이상 번호 일치: 복권 가격의 1000배</li>
+                <li>당첨 상금은 수령 후 즉시 계정 잔액에 추가됩니다</li>
             </ul>
         </div>
     </div>

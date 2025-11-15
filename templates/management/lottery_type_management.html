@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}彩票类型管理{% endblock %}
+{% block title %}복권 유형 관리{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>彩票类型管理</h2>
+    <h2>복권 유형 관리</h2>
     <div>
-        <a href="{% url 'admin:lottery_lotterytype_add' %}" class="btn btn-success">添加彩票类型</a>
-        <a href="{% url 'management:admin_dashboard' %}" class="btn btn-outline-primary">返回仪表板</a>
+        <a href="{% url 'admin:lottery_lotterytype_add' %}" class="btn btn-success">복권 유형 추가</a>
+        <a href="{% url 'management:admin_dashboard' %}" class="btn btn-outline-primary">대시보드로 돌아가기</a>
     </div>
 </div>
 
@@ -15,7 +15,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5>彩票类型列表</h5>
+                <h5>복권 유형 목록</h5>
             </div>
             <div class="card-body">
                 {% if lottery_types %}
@@ -23,14 +23,14 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>彩票名称</th>
-                                <th>描述</th>
-                                <th>价格</th>
-                                <th>号码范围</th>
-                                <th>选择数量</th>
-                                <th>状态</th>
-                                <th>创建时间</th>
-                                <th>操作</th>
+                                <th>복권 이름</th>
+                                <th>설명</th>
+                                <th>가격</th>
+                                <th>번호 범위</th>
+                                <th>선택 수량</th>
+                                <th>상태</th>
+                                <th>생성 시간</th>
+                                <th>작업</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,23 +38,23 @@
                             <tr>
                                 <td><strong>{{ lottery_type.name }}</strong></td>
                                 <td>{{ lottery_type.description|truncatechars:50 }}</td>
-                                <td>￥{{ lottery_type.price }}</td>
+                                <td>₩{{ lottery_type.price }}</td>
                                 <td>1-{{ lottery_type.max_number }}</td>
-                                <td>{{ lottery_type.numbers_count }}个</td>
+                                <td>{{ lottery_type.numbers_count }}개</td>
                                 <td>
                                     {% if lottery_type.is_active %}
-                                    <span class="badge bg-success">启用</span>
+                                    <span class="badge bg-success">활성화</span>
                                     {% else %}
-                                    <span class="badge bg-secondary">禁用</span>
+                                    <span class="badge bg-secondary">비활성화</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ lottery_type.created_at|date:"Y-m-d" }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="{% url 'lottery:lottery_detail' lottery_type.id %}" 
-                                           class="btn btn-outline-primary btn-sm">查看</a>
+                                           class="btn btn-outline-primary btn-sm">보기</a>
                                         <a href="{% url 'admin:lottery_lotterytype_change' lottery_type.id %}" 
-                                           class="btn btn-outline-warning btn-sm">编辑</a>
+                                           class="btn btn-outline-warning btn-sm">편집</a>
                                     </div>
                                 </td>
                             </tr>
@@ -64,7 +64,7 @@
                 </div>
                 {% else %}
                 <div class="alert alert-info">
-                    暂无彩票类型。<a href="{% url 'admin:lottery_lotterytype_add' %}">立即添加</a>
+                    복권 유형이 없습니다. <a href="{% url 'admin:lottery_lotterytype_add' %}">지금 추가</a>
                 </div>
                 {% endif %}
             </div>
@@ -84,19 +84,19 @@
                         <div class="text-primary">
                             <strong>{{ lottery_type.lotterydraw_set.count }}</strong>
                         </div>
-                        <small class="text-muted">期次数</small>
+                        <small class="text-muted">회차 수</small>
                     </div>
                     <div class="col-4">
                         <div class="text-success">
                             <strong>{{ lottery_type.lotterydraw_set.all.0.lotteryticket_set.count|default:0 }}</strong>
                         </div>
-                        <small class="text-muted">销售数</small>
+                        <small class="text-muted">판매 수</small>
                     </div>
                     <div class="col-4">
                         <div class="text-info">
-                            <strong>￥{{ lottery_type.price }}</strong>
+                            <strong>₩{{ lottery_type.price }}</strong>
                         </div>
-                        <small class="text-muted">单价</small>
+                        <small class="text-muted">단가</small>
                     </div>
                 </div>
             </div>

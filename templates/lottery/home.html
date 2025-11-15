@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load lottery_extras %}
 
-{% block title %}首页 - 彩票网站{% endblock %}
+{% block title %}홈 - 복권 사이트{% endblock %}
 
 {% block content %}
 <!-- 欢迎横幅 -->
 <div class="jumbotron bg-primary text-white rounded mb-4 p-5">
     <div class="container">
-        <h1 class="display-4">欢迎来到彩票网站！</h1>
-        <p class="lead">安全、公平、透明的在线彩票平台，让您轻松参与，快乐中奖！</p>
+        <h1 class="display-4">복권 사이트에 오신 것을 환영합니다!</h1>
+        <p class="lead">안전하고 공정하며 투명한 온라인 복권 플랫폼으로, 쉽게 참여하고 즐겁게 당첨되세요!</p>
         {% if not user.is_authenticated %}
-        <a class="btn btn-light btn-lg" href="{% url 'accounts:register' %}" role="button">立即注册</a>
+        <a class="btn btn-light btn-lg" href="{% url 'accounts:register' %}" role="button">지금 가입</a>
         {% endif %}
     </div>
 </div>
@@ -18,7 +18,7 @@
 <!-- 彩票类型展示 -->
 <div class="row mb-4">
     <div class="col-12">
-        <h2 class="mb-3">热门彩票</h2>
+        <h2 class="mb-3">인기 복권</h2>
     </div>
     {% for lottery_type in lottery_types %}
     <div class="col-md-4 mb-3">
@@ -27,13 +27,13 @@
                 <h5 class="card-title">{{ lottery_type.name }}</h5>
                 <p class="card-text">{{ lottery_type.description }}</p>
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-primary font-weight-bold">￥{{ lottery_type.price }}</span>
+                    <span class="text-primary font-weight-bold">₩{{ lottery_type.price }}</span>
                     <div>
-                        <a href="{% url 'lottery:lottery_detail' lottery_type.id %}" class="btn btn-outline-primary btn-sm">详情</a>
+                        <a href="{% url 'lottery:lottery_detail' lottery_type.id %}" class="btn btn-outline-primary btn-sm">상세</a>
                         {% if user.is_authenticated %}
-                        <a href="{% url 'lottery:purchase_lottery' lottery_type.id %}" class="btn btn-primary btn-sm">购买</a>
+                        <a href="{% url 'lottery:purchase_lottery' lottery_type.id %}" class="btn btn-primary btn-sm">구매</a>
                         {% else %}
-                        <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">登录购买</a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">로그인 후 구매</a>
                         {% endif %}
                     </div>
                 </div>
@@ -43,7 +43,7 @@
     {% empty %}
     <div class="col-12">
         <div class="alert alert-info">
-            暂时没有可用的彩票类型。
+            현재 이용 가능한 복권 유형이 없습니다.
         </div>
     </div>
     {% endfor %}
@@ -52,16 +52,16 @@
 <!-- 最新开奖结果 -->
 <div class="row">
     <div class="col-12">
-        <h2 class="mb-3">最新开奖</h2>
+        <h2 class="mb-3">최신 추첨</h2>
         {% if recent_draws %}
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>彩票类型</th>
-                        <th>期次</th>
-                        <th>开奖时间</th>
-                        <th>中奖号码</th>
+                        <th>복권 유형</th>
+                        <th>회차</th>
+                        <th>추첨 시간</th>
+                        <th>당첨 번호</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,11 +81,11 @@
             </table>
         </div>
         <div class="text-center">
-            <a href="{% url 'lottery:draw_results' %}" class="btn btn-outline-primary">查看更多开奖结果</a>
+            <a href="{% url 'lottery:draw_results' %}" class="btn btn-outline-primary">더 많은 추첨 결과 보기</a>
         </div>
         {% else %}
         <div class="alert alert-info">
-            暂时没有开奖记录。
+            현재 추첨 기록이 없습니다.
         </div>
         {% endif %}
     </div>
@@ -95,38 +95,38 @@
 {% if user.is_authenticated %}
 <div class="row mt-4">
     <div class="col-12">
-        <h3>我的统计</h3>
+        <h3>내 통계</h3>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-primary">账户余额</h5>
-                <h3 class="text-success">￥{{ user.userprofile.balance|default:"0.00" }}</h3>
+                <h5 class="card-title text-primary">계정 잔액</h5>
+                <h3 class="text-success">₩{{ user.userprofile.balance|default:"0.00" }}</h3>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-info">总消费</h5>
-                <h3 class="text-warning">￥{{ user.userprofile.total_spent|default:"0.00" }}</h3>
+                <h5 class="card-title text-info">총 소비</h5>
+                <h3 class="text-warning">₩{{ user.userprofile.total_spent|default:"0.00" }}</h3>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title text-success">总中奖</h5>
-                <h3 class="text-success">￥{{ user.userprofile.total_won|default:"0.00" }}</h3>
+                <h5 class="card-title text-success">총 당첨</h5>
+                <h3 class="text-success">₩{{ user.userprofile.total_won|default:"0.00" }}</h3>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">快速操作</h5>
-                <a href="{% url 'accounts:recharge' %}" class="btn btn-primary btn-sm">充值</a>
-                <a href="{% url 'lottery:check_winnings' %}" class="btn btn-success btn-sm">查奖</a>
+                <h5 class="card-title">빠른 작업</h5>
+                <a href="{% url 'accounts:recharge' %}" class="btn btn-primary btn-sm">충전</a>
+                <a href="{% url 'lottery:check_winnings' %}" class="btn btn-success btn-sm">당첨 확인</a>
             </div>
         </div>
     </div>
