@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}购买彩票 - {{ lottery_type.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>购买 {{ lottery_type.name }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>彩票说明：</strong>{{ lottery_type.description }}<br>
+                    <strong>选号规则：</strong>从 1-{{ lottery_type.max_number }} 中选择 {{ lottery_type.numbers_count }} 个号码<br>
+                    <strong>价格：</strong>￥{{ lottery_type.price }}
+                </div>
+
+                <form method="post" id="purchaseForm">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <!-- 手动选号区域 -->
+                    <div id="manualSelection" style="display: none;">
+                        <h5>手动选号</h5>
+                        <div class="number-grid mb-3">
+                            {% for i in "123456789012345678901234567890123456789012345678901234567890"|make_list %}
+                                {% if forloop.counter <= lottery_type.max_number %}
+                                <button type="button" class="btn btn-outline-primary number-btn m-1" data-number="{{ forloop.counter }}">
+                                    {{ forloop.counter }}
+                                </button>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="alert alert-warning">
+                            <small>请选择 {{ lottery_type.numbers_count }} 个号码。已选择：<span id="selectedCount">0</span> 个</small>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            确认购买 (￥{{ lottery_type.price }})
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>账户信息</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>当前余额：</strong>￥{{ user_profile.balance }}</p>
+                <p><strong>购买金额：</strong>￥{{ lottery_type.price }}</p>
+                {% if user_profile.balance < lottery_type.price %}
+                <div class="alert alert-danger">
+                    余额不足！请先充值。
+                </div>
+                <a href="{% url 'accounts:recharge' %}" class="btn btn-primary">立即充值</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>当前期次</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>期次号：</strong>{{ current_draw.draw_number }}</p>
+                <p><strong>开奖时间：</strong>{{ current_draw.draw_date|date:"Y-m-d H:i" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const autoSelectCheckbox = document.getElementById('id_is_auto_select');
+    const manualSelection = document.getElementById('manualSelection');
+    const selectedNumbersInput = document.getElementById('id_selected_numbers');
+    const numberButtons = document.querySelectorAll('.number-btn');
+    const selectedCountSpan = document.getElementById('selectedCount');
+    const maxNumbers = {{ lottery_type.numbers_count }};
+    let selectedNumbers = [];
+
+    // 切换选号模式
+    autoSelectCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            manualSelection.style.display = 'none';
+            selectedNumbersInput.value = '';
+        } else {
+            manualSelection.style.display = 'block';
+        }
+    });
+
+    // 手动选号
+    numberButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const number = parseInt(this.dataset.number);
+            
+            if (selectedNumbers.includes(number)) {
+                // 取消选择
+                selectedNumbers = selectedNumbers.filter(n => n !== number);
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-outline-primary');
+            } else if (selectedNumbers.length < maxNumbers) {
+                // 添加选择
+                selectedNumbers.push(number);
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-primary');
+            }
+            
+            selectedNumbers.sort((a, b) => a - b);
+            selectedNumbersInput.value = selectedNumbers.join(',');
+            selectedCountSpan.textContent = selectedNumbers.length;
+        });
+    });
+
+    // 初始状态
+    if (autoSelectCheckbox.checked) {
+        manualSelection.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load lottery_extras %}
+
+{% block title %}{{ lottery_type.name }} - 彩票详情{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>{{ lottery_type.name }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>彩票说明</h5>
+                        <p class="text-muted">{{ lottery_type.description }}</p>
+                        
+                        <h5>游戏规则</h5>
+                        <ul>
+                            <li>选号范围：1 - {{ lottery_type.max_number }}</li>
+                            <li>选择数量：{{ lottery_type.numbers_count }} 个号码</li>
+                            <li>彩票价格：￥{{ lottery_type.price }}</li>
+                        </ul>
+                        
+                        <h5>中奖规则</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>匹配号码数</th>
+                                        <th>奖金倍数</th>
+                                        <th>奖金金额</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>3个</td>
+                                        <td>10倍</td>
+                                        <td>￥{{ lottery_type.price|mul:10 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4个</td>
+                                        <td>50倍</td>
+                                        <td>￥{{ lottery_type.price|mul:50 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5个</td>
+                                        <td>200倍</td>
+                                        <td>￥{{ lottery_type.price|mul:200 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6个及以上</td>
+                                        <td>1000倍</td>
+                                        <td>￥{{ lottery_type.price|mul:1000 }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h4 class="text-primary">{{ lottery_type.name }}</h4>
+                                <div class="display-4 text-success">￥{{ lottery_type.price }}</div>
+                                <p class="text-muted">每注价格</p>
+                                
+                                {% if user.is_authenticated %}
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'lottery:purchase_lottery' lottery_type.id %}" class="btn btn-primary btn-lg">
+                                        立即购买
+                                    </a>
+                                </div>
+                                {% else %}
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-lg">
+                                        登录购买
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>最近开奖记录</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_draws %}
+                {% for draw in recent_draws %}
+                <div class="border-bottom pb-2 mb-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">{{ draw.draw_number }}</small>
+                        <small class="text-muted">{{ draw.draw_date|date:"m-d H:i" }}</small>
+                    </div>
+                    <div class="mt-1">
+                        {% for number in draw.winning_numbers|split:"," %}
+                        <span class="lottery-number winning-number">{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">暂无开奖记录</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if user.is_authenticated %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>我的统计</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <div class="h5 text-primary">{{ user.userprofile.balance|default:"0" }}</div>
+                            <small class="text-muted">账户余额</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="h5 text-success">{{ user.userprofile.total_won|default:"0" }}</div>
+                        <small class="text-muted">总中奖</small>
+                    </div>
+                </div>
+                <div class="d-grid mt-3">
+                    <a href="{% url 'accounts:recharge' %}" class="btn btn-outline-primary btn-sm">账户充值</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 号码选择示例 -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>号码选择示例</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">从下面的号码中选择 {{ lottery_type.numbers_count }} 个号码：</p>
+                <div class="number-grid">
+                    {% for i in "123456789012345678901234567890123456789012345678901234567890"|make_list %}
+                        {% if forloop.counter <= lottery_type.max_number %}
+                        <span class="lottery-number m-1" style="cursor: default;">{{ forloop.counter }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <strong>提示：</strong>您可以手动选择号码，也可以选择机选让系统随机为您选择号码。
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

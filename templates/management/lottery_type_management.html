@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}彩票类型管理{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>彩票类型管理</h2>
+    <div>
+        <a href="{% url 'admin:lottery_lotterytype_add' %}" class="btn btn-success">添加彩票类型</a>
+        <a href="{% url 'management:admin_dashboard' %}" class="btn btn-outline-primary">返回仪表板</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>彩票类型列表</h5>
+            </div>
+            <div class="card-body">
+                {% if lottery_types %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>彩票名称</th>
+                                <th>描述</th>
+                                <th>价格</th>
+                                <th>号码范围</th>
+                                <th>选择数量</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lottery_type in lottery_types %}
+                            <tr>
+                                <td><strong>{{ lottery_type.name }}</strong></td>
+                                <td>{{ lottery_type.description|truncatechars:50 }}</td>
+                                <td>￥{{ lottery_type.price }}</td>
+                                <td>1-{{ lottery_type.max_number }}</td>
+                                <td>{{ lottery_type.numbers_count }}个</td>
+                                <td>
+                                    {% if lottery_type.is_active %}
+                                    <span class="badge bg-success">启用</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">禁用</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ lottery_type.created_at|date:"Y-m-d" }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'lottery:lottery_detail' lottery_type.id %}" 
+                                           class="btn btn-outline-primary btn-sm">查看</a>
+                                        <a href="{% url 'admin:lottery_lotterytype_change' lottery_type.id %}" 
+                                           class="btn btn-outline-warning btn-sm">编辑</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    暂无彩票类型。<a href="{% url 'admin:lottery_lotterytype_add' %}">立即添加</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 彩票类型统计 -->
+<div class="row mt-4">
+    {% for lottery_type in lottery_types %}
+    <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">{{ lottery_type.name }}</h6>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="text-primary">
+                            <strong>{{ lottery_type.lotterydraw_set.count }}</strong>
+                        </div>
+                        <small class="text-muted">期次数</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-success">
+                            <strong>{{ lottery_type.lotterydraw_set.all.0.lotteryticket_set.count|default:0 }}</strong>
+                        </div>
+                        <small class="text-muted">销售数</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-info">
+                            <strong>￥{{ lottery_type.price }}</strong>
+                        </div>
+                        <small class="text-muted">单价</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

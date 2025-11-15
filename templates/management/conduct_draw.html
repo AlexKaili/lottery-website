@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}执行开奖{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>执行开奖</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h5>开奖信息</h5>
+                    <p><strong>彩票类型：</strong>{{ draw.lottery_type.name }}</p>
+                    <p><strong>期次号：</strong>{{ draw.draw_number }}</p>
+                    <p><strong>开奖时间：</strong>{{ draw.draw_date|date:"Y-m-d H:i:s" }}</p>
+                    <p><strong>参与彩票数量：</strong>{{ ticket_count }} 张</p>
+                    <p><strong>选号规则：</strong>从 1-{{ draw.lottery_type.max_number }} 中选择 {{ draw.lottery_type.numbers_count }} 个号码</p>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <strong>注意：</strong>开奖操作不可撤销，请确认无误后执行。
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('确定要执行开奖吗？此操作不可撤销！')">
+                            🎲 立即开奖
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <a href="{% url 'management:draw_management' %}" class="btn btn-secondary">返回开奖管理</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}创建开奖期次{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>创建新开奖期次</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="lottery_type" class="form-label">彩票类型</label>
+                        <select name="lottery_type" id="lottery_type" class="form-control" required>
+                            <option value="">请选择彩票类型</option>
+                            {% for lottery_type in lottery_types %}
+                            <option value="{{ lottery_type.id }}">{{ lottery_type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="draw_date" class="form-label">开奖时间</label>
+                        <input type="datetime-local" name="draw_date" id="draw_date" class="form-control" required>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <strong>说明：</strong>
+                        <ul class="mb-0">
+                            <li>期次号将自动生成（格式：YYYYMMDD-XXX）</li>
+                            <li>开奖时间建议设置在未来1-2小时</li>
+                            <li>创建后可在开奖管理中执行开奖</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">创建期次</button>
+                        <a href="{% url 'management:draw_management' %}" class="btn btn-secondary">返回</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 设置默认开奖时间为2小时后
+    const now = new Date();
+    now.setHours(now.getHours() + 2);
+    const dateString = now.toISOString().slice(0, 16);
+    document.getElementById('draw_date').value = dateString;
+});
+</script>
+{% endblock %}

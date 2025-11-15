@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load lottery_extras %}
+
+{% block title %}销售报告{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>销售报告</h2>
+    <a href="{% url 'management:admin_dashboard' %}" class="btn btn-outline-primary">返回仪表板</a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>按彩票类型统计</h5>
+            </div>
+            <div class="card-body">
+                {% if lottery_sales %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>彩票类型</th>
+                                <th>销售数量</th>
+                                <th>销售金额</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name, data in lottery_sales.items %}
+                            <tr>
+                                <td>{{ name }}</td>
+                                <td>{{ data.tickets }} 张</td>
+                                <td>￥{{ data.amount }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" role="progressbar" style="width: 50%">
+                                            占比
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    暂无销售数据
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>最近7天销售趋势</h5>
+            </div>
+            <div class="card-body">
+                {% if daily_sales %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>销售数量</th>
+                                <th>销售金额</th>
+                                <th>趋势</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for date, data in daily_sales.items %}
+                            <tr>
+                                <td>{{ date }}</td>
+                                <td>{{ data.tickets }} 张</td>
+                                <td>￥{{ data.amount }}</td>
+                                <td>
+                                    <div class="progress" style="height: 15px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 30%">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    暂无每日销售数据
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-primary">今日销售</h5>
+                <h3 class="text-primary">{{ today_sales.tickets|default:0 }}</h3>
+                <small class="text-muted">张彩票</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-success">今日收入</h5>
+                <h3 class="text-success">￥{{ today_sales.amount|default:0 }}</h3>
+                <small class="text-muted">销售金额</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-info">本周销售</h5>
+                <h3 class="text-info">{{ week_sales.tickets|default:0 }}</h3>
+                <small class="text-muted">张彩票</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-warning">本月销售</h5>
+                <h3 class="text-warning">{{ month_sales.tickets|default:0 }}</h3>
+                <small class="text-muted">张彩票</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

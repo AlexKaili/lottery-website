@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}账户充值{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">账户充值</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info text-center">
+                    <h5>当前余额：￥{{ user_profile.balance }}</h5>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <!-- 快速充值选项 -->
+                    <div class="mb-3">
+                        <label class="form-label">快速选择金额</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="50">￥50</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="100">￥100</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="200">￥200</button>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="500">￥500</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="1000">￥1000</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="2000">￥2000</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">确认充值</button>
+                    </div>
+                </form>
+                
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <strong>充值说明：</strong><br>
+                        • 充值金额将立即到账<br>
+                        • 最低充值金额：￥1<br>
+                        • 充值资金仅用于购买彩票<br>
+                        • 如有问题请联系客服
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const amountInput = document.getElementById('id_amount');
+    const quickAmountButtons = document.querySelectorAll('.quick-amount');
+    
+    quickAmountButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const amount = this.dataset.amount;
+            amountInput.value = amount;
+            
+            // 移除其他按钮的选中状态
+            quickAmountButtons.forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            
+            // 设置当前按钮为选中状态
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-primary');
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}个人中心{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>账户信息</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">用户名</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">邮箱</label>
+                        <input type="email" class="form-control" value="{{ user.email }}" readonly>
+                    </div>
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">更新资料</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <!-- 账户统计 -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">账户余额</h5>
+                        <h3>￥{{ user_profile.balance }}</h3>
+                        <a href="{% url 'accounts:recharge' %}" class="btn btn-success btn-sm">充值</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">总消费</h5>
+                        <h3>￥{{ user_profile.total_spent }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">总中奖</h5>
+                        <h3>￥{{ user_profile.total_won }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 最近彩票 -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between">
+                <h5>最近购买的彩票</h5>
+                <a href="{% url 'lottery:my_tickets' %}" class="btn btn-outline-primary btn-sm">查看全部</a>
+            </div>
+            <div class="card-body">
+                {% if tickets %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>彩票号码</th>
+                                <th>类型</th>
+                                <th>购买时间</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in tickets %}
+                            <tr>
+                                <td>{{ ticket.ticket_number }}</td>
+                                <td>{{ ticket.lottery_draw.lottery_type.name }}</td>
+                                <td>{{ ticket.purchase_time|date:"m-d H:i" }}</td>
+                                <td>
+                                    {% if ticket.is_winning %}
+                                    <span class="badge bg-success">中奖</span>
+                                    {% elif ticket.lottery_draw.is_drawn %}
+                                    <span class="badge bg-secondary">未中奖</span>
+                                    {% else %}
+                                    <span class="badge bg-primary">待开奖</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">暂无购买记录</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- 交易记录 -->
+        <div class="card">
+            <div class="card-header">
+                <h5>最近交易记录</h5>
+            </div>
+            <div class="card-body">
+                {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>金额</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.created_at|date:"m-d H:i" }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if transaction.transaction_type == 'recharge' %}bg-success
+                                        {% elif transaction.transaction_type == 'purchase' %}bg-warning
+                                        {% elif transaction.transaction_type == 'winning' %}bg-info
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ transaction.get_transaction_type_display }}
+                                    </span>
+                                </td>
+                                <td class="
+                                    {% if transaction.transaction_type == 'recharge' or transaction.transaction_type == 'winning' %}text-success
+                                    {% else %}text-danger{% endif %}">
+                                    {% if transaction.transaction_type == 'recharge' or transaction.transaction_type == 'winning' %}+{% else %}-{% endif %}
+                                    ￥{{ transaction.amount }}
+                                </td>
+                                <td>{{ transaction.description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">暂无交易记录</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

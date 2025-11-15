@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load lottery_extras %}
+
+{% block title %}我的彩票{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>我的彩票</h2>
+    <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">购买彩票</a>
+</div>
+
+{% if tickets %}
+<div class="row">
+    {% for ticket in tickets %}
+    <div class="col-md-6 mb-3">
+        <div class="card {% if ticket.is_winning %}border-success{% endif %}">
+            <div class="card-header d-flex justify-content-between">
+                <span>{{ ticket.lottery_draw.lottery_type.name }}</span>
+                <span class="badge {% if ticket.is_winning %}bg-success{% elif ticket.lottery_draw.is_drawn %}bg-secondary{% else %}bg-primary{% endif %}">
+                    {% if ticket.is_winning %}
+                        中奖
+                    {% elif ticket.lottery_draw.is_drawn %}
+                        未中奖
+                    {% else %}
+                        待开奖
+                    {% endif %}
+                </span>
+            </div>
+            <div class="card-body">
+                <p><strong>彩票号码：</strong>{{ ticket.ticket_number }}</p>
+                <p><strong>期次：</strong>{{ ticket.lottery_draw.draw_number }}</p>
+                <p><strong>购买时间：</strong>{{ ticket.purchase_time|date:"Y-m-d H:i" }}</p>
+                <p><strong>选择号码：</strong>
+                    {% for number in ticket.selected_numbers|split:"," %}
+                    <span class="lottery-number">{{ number }}</span>
+                    {% endfor %}
+                    {% if ticket.is_auto_select %}
+                    <span class="badge bg-info">机选</span>
+                    {% endif %}
+                </p>
+                
+                {% if ticket.lottery_draw.is_drawn %}
+                <p><strong>开奖号码：</strong>
+                    {% for number in ticket.lottery_draw.winning_numbers|split:"," %}
+                    <span class="lottery-number winning-number">{{ number }}</span>
+                    {% endfor %}
+                </p>
+                {% endif %}
+                
+                {% if ticket.is_winning %}
+                <div class="alert alert-success">
+                    <strong>恭喜中奖！奖金：￥{{ ticket.winning_amount }}</strong>
+                    {% if not ticket.is_claimed %}
+                    <div class="mt-2">
+                        <a href="{% url 'lottery:claim_prize' ticket.id %}" class="btn btn-success btn-sm">立即兑奖</a>
+                    </div>
+                    {% else %}
+                    <div class="mt-2">
+                        <span class="badge bg-success">已兑奖</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- 分页 -->
+{% if tickets.has_other_pages %}
+<nav aria-label="彩票分页">
+    <ul class="pagination justify-content-center">
+        {% if tickets.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ tickets.previous_page_number }}">上一页</a>
+        </li>
+        {% endif %}
+        
+        {% for num in tickets.paginator.page_range %}
+        {% if tickets.number == num %}
+        <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if tickets.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ tickets.next_page_number }}">下一页</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="text-center">
+    <div class="alert alert-info">
+        您还没有购买任何彩票。
+    </div>
+    <a href="{% url 'lottery:lottery_list' %}" class="btn btn-primary">立即购买</a>
+</div>
+{% endif %}
+{% endblock %}
